@@ -1,0 +1,184 @@
+swagger: '2.0'
+info:
+  title: Template for http server
+  description: API for test server
+  version: 1.0.0
+host: localhost:8000
+schemes:
+  - http
+produces:
+  - application/json
+consumes:
+  - application/json
+basePath: "/api/v1"
+paths:
+  /version:
+    get:
+      summary: Get version of server
+      tags:
+        - version
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/Response.Version"
+
+  /task:
+    post:
+      summary: Create new task
+      tags:
+        - createTask
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Request.Task"
+      responses:
+        204:
+          description: OK No Content
+
+  /task/{task_id}:
+    get:
+      summary: Get task info
+      tags:
+        - getTask
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/Response.Task"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Response.Error"
+
+  /agent:
+    post:
+      summary: Register new agent
+      tags:
+        - regAgent
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Request.Agent"
+      responses:
+        204:
+          description: OK No Content
+
+  /executeTask/{agent}:
+    get:
+      summary: Get task for executiton
+      tags:
+        - execTask
+      parameters:
+        - name: agent
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/Request.Task"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Response.Error"
+
+  /setResult/{id}:
+    post:
+      summary: Set result
+      tags:
+        - setResult
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Response.Task"
+      responses:
+        204:
+          description: OK No Content
+
+
+definitions:
+  Request.Task:
+    title: Task info
+    type: object
+    properties:
+      id:
+        type: string
+        example: 6c8d084825ef4281094bd1bf26003e9a057c3306
+      agent:
+        type: string
+        example: ag-test-vm1
+      command:
+        type: string
+        example: connection
+      target:
+        type: string
+        example: ya.ru
+
+  Response.Task:
+    title: Task Response
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+        example: ok
+
+  Request.Agent:
+    title: Agent info
+    type: object
+    properties:
+      id:
+        type: string
+        example: ag-test-vm1
+      nets:
+        type: array
+        items:
+          type: string
+
+
+  Response.Version:
+    title: Version response
+    type: object
+    properties:
+      version:
+        type: string
+        example: v1.0.0
+      branch:
+        type: string
+        example: main
+      commit:
+        type: string
+        example: 6c8d084825ef4281094bd1bf26003e9a057c3305
+      build_time:
+        type: string
+        example: 2021-03-06_22:22:44_MSK
+
+  Response.Error:
+    title: Error response
+    type: object
+    properties:
+      code:
+        type: integer
+        format: uint32
+        example: 400
+      message:
+        type: string
+        example: some error

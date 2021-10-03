@@ -1,0 +1,7 @@
+POST http://{{host}}/api/v1/agent
+Content-Type: application/json
+
+{
+  "id" : "ag-test-vm1",
+  "nets" : ["net1","net2"]
+}

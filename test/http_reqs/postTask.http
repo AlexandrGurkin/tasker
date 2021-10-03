@@ -1,0 +1,9 @@
+POST http://{{host}}/api/v1/task
+Content-Type: application/json
+
+{
+    "id" : "uniq11",
+    "agent" : "ag-test-mv1",
+    "command" : "ping",
+    "target" : "ya.ru"
+}

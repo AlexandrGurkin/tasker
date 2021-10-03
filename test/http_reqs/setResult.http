@@ -1,0 +1,7 @@
+POST http://{{host}}/api/v1/setResult/uniq11
+Content-Type: application/json
+
+{
+  "id" : "uniq11",
+  "status" : "ok"
+}
