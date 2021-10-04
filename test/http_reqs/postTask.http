@@ -2,8 +2,11 @@ POST http://{{host}}/api/v1/task
 Content-Type: application/json
 
 {
-    "id" : "uniq11",
-    "agent" : "ag-test-mv1",
-    "command" : "ping",
-    "target" : "ya.ru"
+    "id" : "uniq22",
+    "agent" : "ag-test-vm2",
+    "command" : "version",
+    "target" : "192.168.3.5:8071"
 }
+
+
+###//"Mini-Aleksandr",

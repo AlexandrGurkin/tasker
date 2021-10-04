@@ -44,7 +44,7 @@ func runMain(cmd *cobra.Command, args []string) {
 	server := restapi.NewServer(api)
 
 	server.Host = "0.0.0.0"
-	server.Port = 8099
+	server.Port = 8077
 	restapi.SetMiddlewareConfig(middlewares.MiddlewareConfig{Logger: logger, Pprof: true})
 	api.Logger = func(s string, i ...interface{}) {
 		logger.WithXFields(xlog.Fields{consts.FieldModule: "swagger_api_logger"}).
@@ -56,12 +56,15 @@ func runMain(cmd *cobra.Command, args []string) {
 		VMQueue: make(map[string]chan models.RequestTask),
 	}
 
+	am := internal.NewAgentManager()
+
 	api.VersionGetVersionHandler = handlers.VersionHandler{}
 	api.CreateTaskPostTaskHandler = handlers.CreateTaskHandler{&tm}
 	api.GetTaskGetTaskTaskIDHandler = handlers.GetTaskHandler{&tm}
-	api.RegAgentPostAgentHandler = handlers.RegAgentHandler{}
+	api.RegAgentPostAgentHandler = handlers.RegAgentHandler{&tm, am}
 	api.ExecTaskGetExecuteTaskAgentHandler = handlers.GetToExecHandler{&tm}
 	api.SetResultPostSetResultIDHandler = handlers.SetResHandler{&tm}
+	api.AddressGetAddressAgentHandler = handlers.GetAgentHandler{am}
 
 	server.ConfigureAPI()
 	server.KeepAlive = 10 * time.Second

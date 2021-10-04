@@ -10,6 +10,7 @@ import (
 	httptransport "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
+	"github.com/AlexandrGurkin/tasker/client/api/address"
 	"github.com/AlexandrGurkin/tasker/client/api/create_task"
 	"github.com/AlexandrGurkin/tasker/client/api/exec_task"
 	"github.com/AlexandrGurkin/tasker/client/api/get_task"
@@ -60,6 +61,7 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *TemplateFo
 
 	cli := new(TemplateForHTTPServer)
 	cli.Transport = transport
+	cli.Address = address.New(transport, formats)
 	cli.CreateTask = create_task.New(transport, formats)
 	cli.ExecTask = exec_task.New(transport, formats)
 	cli.GetTask = get_task.New(transport, formats)
@@ -110,6 +112,8 @@ func (cfg *TransportConfig) WithSchemes(schemes []string) *TransportConfig {
 
 // TemplateForHTTPServer is a client for template for HTTP server
 type TemplateForHTTPServer struct {
+	Address address.ClientService
+
 	CreateTask create_task.ClientService
 
 	ExecTask exec_task.ClientService
@@ -128,6 +132,7 @@ type TemplateForHTTPServer struct {
 // SetTransport changes the transport on the client and all its subresources
 func (c *TemplateForHTTPServer) SetTransport(transport runtime.ClientTransport) {
 	c.Transport = transport
+	c.Address.SetTransport(transport)
 	c.CreateTask.SetTransport(transport)
 	c.ExecTask.SetTransport(transport)
 	c.GetTask.SetTransport(transport)

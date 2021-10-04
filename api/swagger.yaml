@@ -93,6 +93,26 @@ paths:
           schema:
             $ref: "#/definitions/Response.Error"
 
+  /address/{agent}:
+    get:
+      summary: Get agents ip
+      tags:
+        - address
+      parameters:
+        - name: agent
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/Request.Agent"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Response.Error"
+
   /setResult/{id}:
     post:
       summary: Set result

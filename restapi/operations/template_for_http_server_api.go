@@ -19,6 +19,7 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
+	"github.com/AlexandrGurkin/tasker/restapi/operations/address"
 	"github.com/AlexandrGurkin/tasker/restapi/operations/create_task"
 	"github.com/AlexandrGurkin/tasker/restapi/operations/exec_task"
 	"github.com/AlexandrGurkin/tasker/restapi/operations/get_task"
@@ -49,6 +50,9 @@ func NewTemplateForHTTPServerAPI(spec *loads.Document) *TemplateForHTTPServerAPI
 
 		JSONProducer: runtime.JSONProducer(),
 
+		AddressGetAddressAgentHandler: address.GetAddressAgentHandlerFunc(func(params address.GetAddressAgentParams) middleware.Responder {
+			return middleware.NotImplemented("operation address.GetAddressAgent has not yet been implemented")
+		}),
 		ExecTaskGetExecuteTaskAgentHandler: exec_task.GetExecuteTaskAgentHandlerFunc(func(params exec_task.GetExecuteTaskAgentParams) middleware.Responder {
 			return middleware.NotImplemented("operation exec_task.GetExecuteTaskAgent has not yet been implemented")
 		}),
@@ -101,6 +105,8 @@ type TemplateForHTTPServerAPI struct {
 	//   - application/json
 	JSONProducer runtime.Producer
 
+	// AddressGetAddressAgentHandler sets the operation handler for the get address agent operation
+	AddressGetAddressAgentHandler address.GetAddressAgentHandler
 	// ExecTaskGetExecuteTaskAgentHandler sets the operation handler for the get execute task agent operation
 	ExecTaskGetExecuteTaskAgentHandler exec_task.GetExecuteTaskAgentHandler
 	// GetTaskGetTaskTaskIDHandler sets the operation handler for the get task task ID operation
@@ -189,6 +195,9 @@ func (o *TemplateForHTTPServerAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
+	if o.AddressGetAddressAgentHandler == nil {
+		unregistered = append(unregistered, "address.GetAddressAgentHandler")
+	}
 	if o.ExecTaskGetExecuteTaskAgentHandler == nil {
 		unregistered = append(unregistered, "exec_task.GetExecuteTaskAgentHandler")
 	}
@@ -295,6 +304,10 @@ func (o *TemplateForHTTPServerAPI) initHandlerCache() {
 		o.handlers = make(map[string]map[string]http.Handler)
 	}
 
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/address/{agent}"] = address.NewGetAddressAgent(o.context, o.AddressGetAddressAgentHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

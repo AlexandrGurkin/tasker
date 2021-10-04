@@ -12,6 +12,7 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 
 	"github.com/AlexandrGurkin/tasker/restapi/operations"
+	"github.com/AlexandrGurkin/tasker/restapi/operations/address"
 	"github.com/AlexandrGurkin/tasker/restapi/operations/create_task"
 	"github.com/AlexandrGurkin/tasker/restapi/operations/exec_task"
 	"github.com/AlexandrGurkin/tasker/restapi/operations/get_task"
@@ -44,6 +45,11 @@ func configureAPI(api *operations.TemplateForHTTPServerAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
+	if api.AddressGetAddressAgentHandler == nil {
+		api.AddressGetAddressAgentHandler = address.GetAddressAgentHandlerFunc(func(params address.GetAddressAgentParams) middleware.Responder {
+			return middleware.NotImplemented("operation address.GetAddressAgent has not yet been implemented")
+		})
+	}
 	if api.ExecTaskGetExecuteTaskAgentHandler == nil {
 		api.ExecTaskGetExecuteTaskAgentHandler = exec_task.GetExecuteTaskAgentHandlerFunc(func(params exec_task.GetExecuteTaskAgentParams) middleware.Responder {
 			return middleware.NotImplemented("operation exec_task.GetExecuteTaskAgent has not yet been implemented")

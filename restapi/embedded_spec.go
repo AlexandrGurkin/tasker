@@ -36,6 +36,36 @@ func init() {
   "host": "localhost:8000",
   "basePath": "/api/v1",
   "paths": {
+    "/address/{agent}": {
+      "get": {
+        "tags": [
+          "address"
+        ],
+        "summary": "Get agents ip",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "agent",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Request.Agent"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Response.Error"
+            }
+          }
+        }
+      }
+    },
     "/agent": {
       "post": {
         "tags": [
@@ -298,6 +328,36 @@ func init() {
   "host": "localhost:8000",
   "basePath": "/api/v1",
   "paths": {
+    "/address/{agent}": {
+      "get": {
+        "tags": [
+          "address"
+        ],
+        "summary": "Get agents ip",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "agent",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Request.Agent"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Response.Error"
+            }
+          }
+        }
+      }
+    },
     "/agent": {
       "post": {
         "tags": [
